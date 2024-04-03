@@ -37,7 +37,7 @@ function Header(){
                                 </li>
 
                                 <li>
-                                    <Link to={"/flower/list"}>Special Day</Link>
+                                    <Link to={"/flower/list/화이트데이"}>Special Day</Link>
                                 </li>
 
                                 <li className="dropdown">

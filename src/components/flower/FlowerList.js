@@ -1,96 +1,40 @@
-import {Fragment,useState,useEffect} from "react";
+import {Fragment,useState} from "react";
 import {Link} from "react-router-dom";
 import {useRef} from "react";
 import { useQuery } from "react-query";
 import apiClient from "../../http-commons";
 function FlowerList(){
     const [curpage,setCurpage]=useState(1)
-    const [cateMinor,setCateMinor]=useState('화이트데이')
+    const [cateMinor, setCateMinor] = useState('화이트데이')
     const [name,setName]=useState('')
     const nameRef=useRef(null)
-    const [prevCateMinor, setPrevCateMinor] = useState('')
-
-
-    useEffect(() => {
-        if (prevCateMinor !== cateMinor) {
-            console.log("이전 카테고리:", prevCateMinor)
-            setCurpage(1)
-            setPrevCateMinor(cateMinor)
-            setName('')
-        }
-    }, [cateMinor, prevCateMinor])
 
     const {isLoading,isError,error,data,refetch}=useQuery(
-        ["f-list",curpage],
+        ["f-list",curpage,cateMinor,name],
         async()=>{
-                return await apiClient.get(`/flower/list_react/${curpage}/${cateMinor}?name=${name}`)
+                return await apiClient.get(`/flower/list_react/${curpage}/${cateMinor}`,{
+                    params:{
+                        name:name
+                    }
+                })
             }
-        )
-    
-    useEffect(() => {
-        refetch()
-    }, [cateMinor,name])
 
+        )
+    console.log(cateMinor)
     if(isLoading) return <h1 className="text-center">Loading</h1>
     if(isError) return <h1 className="text-center">{error}</h1>
     console.log(data)
 
-     const cateChange = (cate) => {
-        setCateMinor(cate)
+    const cateChange = (cate) => {
         setCurpage(1)
+        setCateMinor(cate) 
+        console.log("바뀐:"+cate)
     }
 
     const findData=(e)=>{
             setName(e.target.value)
     }
 
-    let html=(data.data.list && data.data.list.map((vo)=>
-        
-            <div className="col-md-4 col-sm-6" style={{"width":"360px","height":"500px","marginBottom":"20px"}}>
-            <div className="portfolio-item">
-                <div className="item-image">
-                    <Link to={"/flower/detail/"+vo.fno}>
-                        <img src={vo.img} className="img-responsive center-block"
-                             alt="portfolio1"/>
-                        <div><span><i className="fa fa-plus"></i></span></div>
-                    </Link>
-                </div>
-
-                <div className="item-description" style={{"height":"100%"}}>
-                    <div className="row">
-                        <div className="col-xs-12">
-                          <span className="item-name" style={{"width": "100%"}}>{vo.name}</span>
-                            <span>{vo.cate_minor}</span>
-                            <span>{vo.price}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        )
-    )
-
-    let html2=(data.data.list2 && data.data.list2.map((vo2)=>
-        <Fragment>
-                    
-                    <div className="tab-content">
-                            <div className="tab-pane active" id="popular">
-                                <div className="tab-pane" id="recent">
-                                    <div className="recent-post">
-                                        <img src={vo2.img}
-                                             className="img-responsive center-block"/>
-                                        <h5 className="post-widget-heading">{vo2.name}</h5>
-                                        <span>{vo2.cate_minor}</span>
-                                        <p>{vo2.price}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-        </Fragment>
-        )
-    )
     const pageChange = (page) => {
         setCurpage(page)
     }
@@ -138,19 +82,19 @@ function FlowerList(){
                 <aside>
                     <div className="tag-widget">
 
-                        <div className="tags">
-                            <a href="#" className={cateMinor === '화이트데이' ? 'active' : ''}
-                               onClick={() => cateChange('화이트데이')}>화이트데이</a>
-                            <a href="#" className={cateMinor === '프로포즈' ? 'active' : ''}
-                               onClick={() => cateChange('프로포즈')}>프로포즈</a>
-                            <a href="#" className={cateMinor === '생일' ? 'active' : ''}
-                               onClick={() => cateChange('생일')}>생일</a>
-                            <a href="#" className={cateMinor === '졸업/입학' ? 'active' : ''}
-                               onClick={() => cateChange('졸업/입학')}>졸업/입학</a>
-                            <a href="#" className={cateMinor === '승진/개업' ? 'active' : ''}
-                               onClick={() => cateChange('승진/개업')}>승진/개업</a>
-                            <a href="#" className={cateMinor === '응원/축하' ? 'active' : ''}
-                               onClick={() => cateChange('응원/축하')}>응원/축하</a>
+                    <div className="tags">
+                            <Link to={"/flower/list/화이트데이"} className={cateMinor === '화이트데이' ? 'active' : ''}
+                               onClick={() => cateChange('화이트데이')}>화이트데이</Link>
+                            <Link to={"/flower/list/프로포즈"} className={cateMinor === '프로포즈' ? 'active' : ''}
+                               onClick={() => cateChange('프로포즈')}>프로포즈</Link>
+                            <Link to={"/flower/list/생일"} className={cateMinor === '생일' ? 'active' : ''}
+                               onClick={() => cateChange('생일')}>생일</Link>
+                           <Link to={`/flower/list/${encodeURIComponent("졸업/입학")}`} className={cateMinor === '졸업/입학' ? 'active' : ''} 
+                                onClick={() => cateChange('졸업/입학')}>졸업/입학</Link>
+                            <Link to={"/flower/list/승진/개업"} className={cateMinor === '승진/개업' ? 'active' : ''}
+                               onClick={() => cateChange('승진/개업')}>승진/개업</Link>
+                            <Link to={"/flower/list/응원/축하"} className={cateMinor === '응원/축하' ? 'active' : ''}
+                               onClick={() => cateChange('응원/축하')}>응원/축하</Link>
                         </div>
                     </div>
                 </aside>
@@ -169,7 +113,28 @@ function FlowerList(){
                 <div className="col-md-9">
                     <div className="portfolio-item-list">
                         <div className="row">
-                            {html}
+                            {data.data.list && data.data.list.map((vo)=>
+                                <div className="col-md-4 col-sm-6" style={{"width":"360px","height":"500px","marginBottom":"20px"}}>
+                                <div className="portfolio-item">
+                                <div className="item-image">
+                                <Link to={"/flower/detail/"+vo.fno}>
+                                <img src={vo.img} className="img-responsive center-block" alt="portfolio1"/>
+                                <div><span><i className="fa fa-plus"></i></span></div>
+                </Link>
+            </div>
+
+            <div className="item-description" style={{"height":"100%"}}>
+                <div className="row">
+                    <div className="col-xs-12">
+                      <span className="item-name" style={{"width": "100%"}}>{vo.name}</span>
+                        <span>{vo.cate_minor}</span>
+                        <span>{vo.price}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    )}
                         </div>
                     </div>
                 </div>
@@ -183,7 +148,21 @@ function FlowerList(){
                                     </a>
                                 </li>
                             </ul>
-                            {html2}
+                            {data.data.list2 && data.data.list2.map((vo2)=> 
+                    <div className="tab-content">
+                            <div className="tab-pane active" id="popular">
+                                <div className="tab-pane" id="recent">
+                                    <div className="recent-post">
+                                        <img src={vo2.img}
+                                             className="img-responsive center-block"/>
+                                        <h5 className="post-widget-heading">{vo2.name}</h5>
+                                        <span>{vo2.cate_minor}</span>
+                                        <p>{vo2.price}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            )}
                         </div>
                     </div>
                 </aside>
