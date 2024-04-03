@@ -10,7 +10,7 @@ function FlowerDownList (){
     const {isLoading,data,isError,error}=useQuery(
         ['flower-list', cateMinor, curpage],
         async()=>{
-        return await apiClient.get(`/flower/list_react?page=${curpage}&cate_minor=${cateMinor}&name=${name}`)
+        return await apiClient.get(`/flower/list_react/${curpage}/${cateMinor}?name=${name}`)
     })
     if(isLoading) return <h3 className={"text-center"}>Loading</h3>
     if(isError) return <h3 className={"text-center"}>{error}</h3>

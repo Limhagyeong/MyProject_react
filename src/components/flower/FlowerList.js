@@ -23,7 +23,7 @@ function FlowerList(){
     const {isLoading,isError,error,data,refetch}=useQuery(
         ["f-list",curpage],
         async()=>{
-                return await apiClient.get(`/flower/list_react?page=${curpage}&cate_minor=${cateMinor}&name=${name}`)
+                return await apiClient.get(`/flower/list_react/${curpage}/${cateMinor}?name=${name}`)
             }
         )
     
