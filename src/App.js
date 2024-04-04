@@ -18,8 +18,8 @@ function App() {
     <Router>
       <Header/>
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path={"/flower/list/:cateMinor"} element={<FlowerList/>}/>
+        <Route path={"/"} element={<Home/>}/>
+        <Route path={"/flower/list"} element={<FlowerList/>}/>
         <Route path={"/flower/down/list/:cateMinor"} element={<FlowerDownList/>}/>
         <Route path={"/flower/detail/:fno"} element={<FlowerDetail/>}/>
         <Route path={"/board/list"} element={<BoardList/>}/>

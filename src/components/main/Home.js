@@ -35,8 +35,8 @@ function Home(){
         })
         // 검색 하면 다시 실행
     }
-    let html=(newsList.map((m)=>
-            <div className="col-md-4" style={{"width": "380px","height":"125px"}}>
+    let html=(newsList.map((m,index)=>
+            <div className="col-md-4" style={{"width": "380px","height":"125px"}} key={index}>
                 <div className="portfolio-item">
                     <div className="item-description">
                         <div className="row">

@@ -35,11 +35,22 @@ function FlowerDetail(){
             <section className="blog-content">
                 <div className="container">
                     <div className="row">
-                        <ol className="breadcrumb_del">
-                            <li><Link to={`/flower/down/list/${data.data.list_data.cate_minor}`}>
-                                <i className="fas fa-home"></i>&nbsp;목록 돌아가기</Link>
-                            </li>
-                        </ol>
+                        {
+                              data.data.list_data.cate_minor === '화이트데이' || data.data.list_data.cate_minor === '프로포즈' || data.data.list_data.cate_minor === '생일' ||
+                              data.data.list_data.cate_minor === '졸업/입학' || data.data.list_data.cate_minor === '승진/개업' || data.data.list_data.cate_minor === '응원/축하' ?
+                                 (<ol className="breadcrumb_del">
+                                      <li><Link to={`/flower/list`}>
+                                          <i className="fas fa-home"></i>&nbsp;목록 돌아가기</Link>
+                                      </li>
+                                  </ol>) :
+                                  (
+                                      <ol className="breadcrumb_del">
+                                          <li><Link to={`/flower/down/list/${data.data.list_data.cate_minor}`}>
+                                              <i className="fas fa-home"></i>&nbsp;목록 돌아가기</Link>
+                                         </li>
+                                      </ol>
+                                  )
+                        }
                         <main className="col-md-12" style={{"display": "block"}}>
                             <article className="blog-item">
                                 <table style={{"marginLeft": "20px"}}>

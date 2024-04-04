@@ -12,11 +12,12 @@ function FlowerList(){
     const {isLoading,isError,error,data,refetch}=useQuery(
         ["f-list",curpage,cateMinor,name],
         async()=>{
-                return await apiClient.get(`/flower/list_react/${curpage}/${cateMinor}`,{
-                    params:{
-                        name:name
-                    }
-                })
+            return await apiClient.get(`/flower/list_react/${curpage}`,{
+                params:{
+                    name:name,
+                    cate_minor:cateMinor
+                }
+            })
             }
 
         )
@@ -26,7 +27,6 @@ function FlowerList(){
     console.log(data)
 
     const cateChange = (cate) => {
-        setCurpage(1)
         setCateMinor(cate) 
         console.log("바뀐:"+cate)
     }
@@ -83,18 +83,18 @@ function FlowerList(){
                     <div className="tag-widget">
 
                     <div className="tags">
-                            <Link to={"/flower/list/화이트데이"} className={cateMinor === '화이트데이' ? 'active' : ''}
-                               onClick={() => cateChange('화이트데이')}>화이트데이</Link>
-                            <Link to={"/flower/list/프로포즈"} className={cateMinor === '프로포즈' ? 'active' : ''}
-                               onClick={() => cateChange('프로포즈')}>프로포즈</Link>
-                            <Link to={"/flower/list/생일"} className={cateMinor === '생일' ? 'active' : ''}
-                               onClick={() => cateChange('생일')}>생일</Link>
-                           <Link to={`/flower/list/${encodeURIComponent("졸업/입학")}`} className={cateMinor === '졸업/입학' ? 'active' : ''} 
-                                onClick={() => cateChange('졸업/입학')}>졸업/입학</Link>
-                            <Link to={"/flower/list/승진/개업"} className={cateMinor === '승진/개업' ? 'active' : ''}
-                               onClick={() => cateChange('승진/개업')}>승진/개업</Link>
-                            <Link to={"/flower/list/응원/축하"} className={cateMinor === '응원/축하' ? 'active' : ''}
-                               onClick={() => cateChange('응원/축하')}>응원/축하</Link>
+                            <a href="#" className={cateMinor === '화이트데이' ? 'active' : ''}
+                               onClick={() => cateChange('화이트데이')}>화이트데이</a>
+                            <a href="#" className={cateMinor === '프로포즈' ? 'active' : ''}
+                               onClick={() => cateChange('프로포즈')}>프로포즈</a>
+                            <a href="#" className={cateMinor === '생일' ? 'active' : ''}
+                               onClick={() => cateChange('생일')}>생일</a>
+                           <a href="#" className={cateMinor === '졸업/입학' ? 'active' : ''} 
+                                onClick={() => cateChange("졸업/입학")}>졸업/입학</a>
+                            <a href="#" className={cateMinor === '승진/개업' ? 'active' : ''}
+                               onClick={() => cateChange('승진/개업')}>승진/개업</a>
+                            <a href="#" className={cateMinor === '응원/축하' ? 'active' : ''}
+                               onClick={() => cateChange('응원/축하')}>응원/축하</a>
                         </div>
                     </div>
                 </aside>

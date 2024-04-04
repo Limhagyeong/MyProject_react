@@ -1,7 +1,68 @@
-import {Fragment} from "react";
+import {Fragment,useRef,useState} from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import apiClient from "../../http-commons";
 
 function Header(){
+    const [login,setLogin]=useState(false)
+    const [id,setId]=useState('')
+    const [pwd,setPwd]=useState('')
+    const idRef=useRef(null)
+    const pwdRef=useRef(null)
+    const {isLoading,data,refetch:loginOk}=useQuery(['login-ok'],
+       async () => {
+         return await apiClient.get(`/member/login/${id}/${pwd}`)
+       },
+       {
+          onSuccess:(res)=>{
+             if(res.data.msg==="NOID")
+             {
+                 alert("아이디가 존재하지 않습니다!!")
+                 setId('')
+                 setPwd('')
+                 idRef.current.focus()
+             }
+             else if(res.data.msg==="NOPWD")
+             {
+                 alert("비밀번호가 틀립니다!!")
+                 setPwd('')
+                 pwdRef.current.focus()
+             }
+             else if(res.data.msg==="OK")
+             {
+                 window.sessionStorage.setItem("id",res.data.id)
+                 window.sessionStorage.setItem("name",res.data.name)
+                 setLogin(true)
+             }
+          }
+       },
+       {
+          onError:(err)=>{
+             console.log(err.response)
+          }
+       }
+    )
+    const memberLogin=()=>{
+       if(id.trim()==="")
+       {
+         idRef.current.focus()
+         return
+       }
+       else if(pwd.trim()==="")
+       {
+         pwdRef.current.focus()
+         return 
+       }
+ 
+       loginOk()
+    }
+    const memberLogout=()=>{
+       window.sessionStorage.clear(); 
+       setId('')
+       setPwd('')
+       setLogin(false)
+    }
+ 
     return(
         <Fragment>
             <div id="home-page">
@@ -24,9 +85,39 @@ function Header(){
                                          alt="logo" style={{"marginLeft":"475px"}}/>
                                 </a>
                             </div>
-
                         </div>
-
+                        <div style={{"height":"40px"}}></div>
+                        <div className="collapse navbar-collapse" id="main-nav-collapse">
+                            <ul className="nav navbar-nav navbar-right text-uppercase">
+                                <li>
+                                <div className="login_register_area d-flex">
+                            {
+                                !login &&
+                                <div className="login">
+                                    ID:<input type="text" style={{"width":"150px","marginTop":"20px","alignItems":"right"}} className="input-sm"
+                                        onChange={(e)=>setId(e.target.value)} 
+                                        ref={idRef}
+                                        value={id}
+                                    />&nbsp;
+                                    PW:<input type="password"  style={{"width":"150px"}} className="input-sm"
+                                        onChange={(e)=>setPwd(e.target.value)}
+                                        ref={pwdRef}
+                                        value={pwd}
+                                    />&nbsp;
+                                    <button className="btn-sm" onClick={memberLogin}>로그인</button>
+                                </div>
+                            }
+                            {
+                                login &&
+                                <div className="login" style={{"marginTop":"20px","alignItems":"right"}}>
+                                {window.sessionStorage.getItem("name")}님 로그인중입니다&nbsp;
+                                <button className="btn-sm" onClick={memberLogout}>로그아웃</button>
+                                </div>
+                            }
+                        </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div className="collapse navbar-collapse" id="main-nav-collapse">
                             <ul className="nav navbar-nav navbar-right text-uppercase">
                                 <li>
@@ -37,7 +128,7 @@ function Header(){
                                 </li>
 
                                 <li>
-                                    <Link to={"/flower/list/화이트데이"}>Special Day</Link>
+                                    <Link to={"/flower/list"}>Special Day</Link>
                                 </li>
 
                                 <li className="dropdown">
