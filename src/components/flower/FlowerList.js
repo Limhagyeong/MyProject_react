@@ -7,7 +7,6 @@ function FlowerList(){
     const [curpage,setCurpage]=useState(1)
     const [cateMinor, setCateMinor] = useState('화이트데이')
     const [name,setName]=useState('')
-    const nameRef=useRef(null)
 
     const {isLoading,isError,error,data,refetch:flowerfind}=useQuery(
         ["f-list",curpage,cateMinor],
