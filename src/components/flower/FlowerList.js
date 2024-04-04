@@ -9,8 +9,8 @@ function FlowerList(){
     const [name,setName]=useState('')
     const nameRef=useRef(null)
 
-    const {isLoading,isError,error,data,refetch}=useQuery(
-        ["f-list",curpage,cateMinor,name],
+    const {isLoading,isError,error,data,refetch:flowerfind}=useQuery(
+        ["f-list",curpage,cateMinor],
         async()=>{
             return await apiClient.get(`/flower/list_react/${curpage}`,{
                 params:{
@@ -27,12 +27,16 @@ function FlowerList(){
     console.log(data)
 
     const cateChange = (cate) => {
+        setName('')
         setCateMinor(cate) 
         console.log("바뀐:"+cate)
     }
 
     const findData=(e)=>{
             setName(e.target.value)
+    }
+    const findBtn=()=>{
+        flowerfind()
     }
 
     const pageChange = (page) => {
@@ -102,9 +106,8 @@ function FlowerList(){
             <div className={"container"} style={{"width": "500px", "marginBottom": "20px"}}>
                 <div className="input-group margin-bottom-sm">
                     <input className="form-control" type="text" placeholder="검색어를 입력하세요"
-                           ref={nameRef}
                            value={name} onChange={findData}/>
-                    <span className="input-group-addon">
+                    <span className="input-group-addon" onClick={findBtn}>
                                     <i className="fa fa-paper-plane fa-fw"></i>
                                     </span>
                 </div>
